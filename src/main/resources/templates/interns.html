@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>InternHaul | Interns</title>
+
+    <link rel="stylesheet"
+          th:href="@{/style.css}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                IH
+            </div>
+
+            <div>
+
+                <h2>InternHaul</h2>
+
+                <span>
+                    Allocation Platform
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+
+            <a th:href="@{/dashboard}"
+               class="nav-item">
+
+                <span>▦</span>
+                Dashboard
+
+            </a>
+
+
+            <a th:href="@{/interns}"
+               class="nav-item active">
+
+                <span>◉</span>
+                Interns
+
+            </a>
+
+
+            <a th:href="@{/projects}"
+               class="nav-item">
+
+                <span>▣</span>
+                Projects
+
+            </a>
+
+
+            <a th:href="@{/matching}"
+               class="nav-item">
+
+                <span>✦</span>
+                Matching
+
+            </a>
+
+
+            <a th:href="@{/allocations}"
+               class="nav-item">
+
+                <span>⇄</span>
+                Allocations
+
+            </a>
+
+
+            <div class="nav-divider"></div>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>⚙</span>
+                Settings
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <span>
+                InternHaul
+            </span>
+
+            <small>
+                v1.0.0
+            </small>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- =========================
+             TOPBAR
+        ========================== -->
+
+        <header class="topbar">
+
+
+            <div>
+
+                <h1>
+                    Interns
+                </h1>
+
+                <p>
+                    Manage interns and their availability
+                </p>
+
+            </div>
+
+
+            <div class="user-area">
+
+
+                <button class="notification"
+                        type="button">
+
+                    🔔
+
+                </button>
+
+
+                <div class="user-profile">
+
+
+                    <div class="avatar">
+                        M
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Manager
+                        </strong>
+
+                        <span>
+                            Project Manager
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================
+             PAGE CONTENT
+        ========================== -->
+
+        <section class="dashboard">
+
+
+            <!-- =========================
+                 PAGE TOOLBAR
+            ========================== -->
+
+            <div class="page-toolbar">
+
+
+                <div>
+
+                    <span class="eyebrow">
+                        RESOURCE MANAGEMENT
+                    </span>
+
+
+                    <h2 class="page-title">
+                        Intern Directory
+                    </h2>
+
+
+                    <p class="page-description">
+                        View intern profiles, availability and
+                        allocation status.
+                    </p>
+
+                </div>
+
+
+                <button class="primary-button"
+                        type="button"
+                        onclick="openAddInternModal()">
+
+                    + Add Intern
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 INTERN GRID
+            ========================== -->
+
+            <div class="intern-grid">
+
+
+                <!-- =========================
+                     EMPTY STATE
+                ========================== -->
+
+                <div th:if="${interns.isEmpty()}"
+                     class="panel"
+                     style="grid-column: 1 / -1;">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                INTERN POOL
+                            </span>
+
+                            <h3>
+                                No Interns Found
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="project-info">
+
+                        <p>
+                            There are currently no interns matching
+                            this view.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     INTERN CARD
+                ========================== -->
+
+                <div class="intern-card"
+                     th:each="intern : ${interns}">
+
+
+                    <!-- CARD HEADER -->
+
+                    <div class="intern-card-header">
+
+
+                        <div class="large-avatar"
+                             th:classappend="${intern.available}
+                             ? ' available-avatar' : ''">
+
+
+                            <span th:text="${#strings.substring(
+                                intern.name, 0, 1
+                            ).toUpperCase()}">
+
+                                A
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h3 class="intern-title"
+                                th:text="${intern.name}">
+
+                                Intern Name
+
+                            </h3>
+
+
+                            <span class="availability"
+                                  th:classappend="${intern.available}
+                                  ? ' available' : ' allocated'">
+
+
+                                <span th:if="${intern.available}">
+
+                                    Available
+
+                                </span>
+
+
+                                <span th:unless="${intern.available}">
+
+                                    Allocated
+
+                                </span>
+
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CARD DETAILS -->
+
+                    <div class="intern-details">
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                📧
+                            </span>
+
+                            <span th:text="${intern.email}">
+
+                                email@example.com
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                📍
+                            </span>
+
+                            <span th:text="${intern.location}">
+
+                                Hyderabad
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CARD FOOTER -->
+
+                    <div class="intern-card-footer">
+
+
+                        <span class="allocation-label"
+                              th:if="${!intern.available}">
+
+                            Currently Allocated
+
+                        </span>
+
+
+                        <span class="allocation-label"
+                              th:if="${intern.available}">
+
+                            Ready for Allocation
+
+                        </span>
+
+
+                        <a class="view-link"
+                           th:href="@{/interns/{id}(id=${intern.id})}">
+
+                            View Profile →
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================
+     ADD INTERN MODAL
+========================== -->
+
+<div id="addInternModal"
+     class="modal-overlay">
+
+
+    <div class="modal-card">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+
+            <div>
+
+                <h2>
+                    Add Intern
+                </h2>
+
+                <p>
+                    Create a new intern profile
+                </p>
+
+            </div>
+
+
+            <button class="modal-close"
+                    type="button"
+                    onclick="closeAddInternModal()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             ADD INTERN FORM
+        ========================== -->
+
+        <form id="addInternForm">
+
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+
+                <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter intern name"
+                        required>
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+
+                <input
+                        type="email"
+                        id="email"
+                        placeholder="intern@example.com"
+                        required>
+
+            </div>
+
+
+
+            <!-- LOCATION -->
+
+            <div class="form-group">
+
+                <label for="location">
+                    Location
+                </label>
+
+
+                <input
+                        type="text"
+                        id="location"
+                        placeholder="Hyderabad"
+                        required>
+
+            </div>
+
+
+
+            <!-- =========================
+                 SKILLS
+            ========================== -->
+
+            <div class="form-section">
+
+
+                <div class="form-section-header">
+
+
+                    <div>
+
+                        <h3>
+                            Skills
+                        </h3>
+
+                        <p>
+                            Add the intern's technical skills
+                        </p>
+
+                    </div>
+
+
+                    <button
+                            type="button"
+                            class="add-skill-button"
+                            onclick="addSkillRow()">
+
+                        + Add Skill
+
+                    </button>
+
+                </div>
+
+
+
+                <div id="skillsContainer">
+
+
+                    <!-- DEFAULT SKILL ROW -->
+
+                    <div class="skill-row">
+
+
+                        <select class="skill-select">
+
+
+                            <option value="">
+                                Select skill
+                            </option>
+
+
+                            <option value="1">
+                                Java
+                            </option>
+
+
+                            <option value="2">
+                                Spring Boot
+                            </option>
+
+
+                            <option value="3">
+                                MySQL
+                            </option>
+
+
+                            <option value="4">
+                                Docker
+                            </option>
+
+
+                        </select>
+
+
+
+                        <select class="proficiency-select">
+
+
+                            <option value="">
+                                Level
+                            </option>
+
+
+                            <option value="1">
+                                1 / 5
+                            </option>
+
+
+                            <option value="2">
+                                2 / 5
+                            </option>
+
+
+                            <option value="3">
+                                3 / 5
+                            </option>
+
+
+                            <option value="4">
+                                4 / 5
+                            </option>
+
+
+                            <option value="5">
+                                5 / 5
+                            </option>
+
+
+                        </select>
+
+
+
+                        <button
+                                type="button"
+                                class="remove-skill-button"
+                                onclick="removeSkillRow(this)">
+
+                            ×
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 FORM ACTIONS
+            ========================== -->
+
+            <div class="form-actions">
+
+
+                <button
+                        type="button"
+                        class="secondary-btn"
+                        onclick="closeAddInternModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                        type="submit"
+                        class="primary-button">
+
+                    Add Intern
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script>
+
+
+    // =========================
+    // MODAL
+    // =========================
+
+    function openAddInternModal() {
+
+        document
+            .getElementById("addInternModal")
+            .classList.add("show");
+
+    }
+
+
+    function closeAddInternModal() {
+
+        document
+            .getElementById("addInternModal")
+            .classList.remove("show");
+
+    }
+
+
+
+    // =========================
+    // ADD SKILL ROW
+    // =========================
+
+    function addSkillRow() {
+
+
+        const container =
+            document.getElementById(
+                "skillsContainer"
+            );
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className = "skill-row";
+
+
+        row.innerHTML = `
+
+            <select class="skill-select">
+
+                <option value="">
+                    Select skill
+                </option>
+
+                <option value="1">
+                    Java
+                </option>
+
+                <option value="2">
+                    Spring Boot
+                </option>
+
+                <option value="3">
+                    MySQL
+                </option>
+
+                <option value="4">
+                    Docker
+                </option>
+
+            </select>
+
+
+            <select class="proficiency-select">
+
+                <option value="">
+                    Level
+                </option>
+
+                <option value="1">
+                    1 / 5
+                </option>
+
+                <option value="2">
+                    2 / 5
+                </option>
+
+                <option value="3">
+                    3 / 5
+                </option>
+
+                <option value="4">
+                    4 / 5
+                </option>
+
+                <option value="5">
+                    5 / 5
+                </option>
+
+            </select>
+
+
+            <button
+                    type="button"
+                    class="remove-skill-button"
+                    onclick="removeSkillRow(this)">
+
+                ×
+
+            </button>
+
+        `;
+
+
+        container.appendChild(row);
+
+    }
+
+
+
+    // =========================
+    // REMOVE SKILL ROW
+    // =========================
+
+    function removeSkillRow(button) {
+
+
+        const container =
+            document.getElementById(
+                "skillsContainer"
+            );
+
+
+        const rows =
+            container.querySelectorAll(
+                ".skill-row"
+            );
+
+
+        // Keep at least one row
+
+        if (rows.length === 1) {
+
+
+            rows[0]
+                .querySelector(".skill-select")
+                .value = "";
+
+
+            rows[0]
+                .querySelector(".proficiency-select")
+                .value = "";
+
+
+            return;
+
+        }
+
+
+        button
+            .closest(".skill-row")
+            .remove();
+
+    }
+
+
+
+    // =========================
+    // ADD INTERN
+    // =========================
+
+    document
+        .getElementById("addInternForm")
+        .addEventListener(
+            "submit",
+            async function (event) {
+
+
+                event.preventDefault();
+
+
+
+                // =========================
+                // BASIC DETAILS
+                // =========================
+
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                const location =
+                    document
+                        .getElementById("location")
+                        .value
+                        .trim();
+
+
+
+                // =========================
+                // COLLECT SKILLS
+                // =========================
+
+                const skillRows =
+                    document.querySelectorAll(
+                        "#skillsContainer .skill-row"
+                    );
+
+
+                const skills = [];
+
+
+                skillRows.forEach(
+                    function (row) {
+
+
+                        const skillId =
+                            row
+                                .querySelector(
+                                    ".skill-select"
+                                )
+                                .value;
+
+
+                        const proficiency =
+                            row
+                                .querySelector(
+                                    ".proficiency-select"
+                                )
+                                .value;
+
+
+                        if (
+                            skillId &&
+                            proficiency
+                        ) {
+
+                            skills.push({
+
+                                skillId:
+                                    Number(skillId),
+
+                                proficiency:
+                                    Number(proficiency)
+
+                            });
+
+                        }
+
+                    }
+                );
+
+
+
+                // =========================
+                // INTERN OBJECT
+                // =========================
+
+                const intern = {
+
+                    name: name,
+
+                    email: email,
+
+                    location: location,
+
+                    available: true
+
+                };
+
+
+
+                try {
+
+
+                    // =========================
+                    // CREATE INTERN
+                    // =========================
+
+                    const internResponse =
+                        await fetch(
+                            "/api/interns",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        intern
+                                    )
+
+                            }
+                        );
+
+
+
+                    if (!internResponse.ok) {
+
+
+                        let message =
+                            "Failed to add intern.";
+
+
+                        try {
+
+
+                            const error =
+                                await internResponse
+                                    .json();
+
+
+                            if (error.message) {
+
+                                message =
+                                    error.message;
+
+                            }
+
+
+                        } catch (e) {
+
+                            console.error(
+                                "Could not read error response",
+                                e
+                            );
+
+                        }
+
+
+                        alert(message);
+
+                        return;
+
+                    }
+
+
+
+                    // =========================
+                    // CREATED INTERN
+                    // =========================
+
+                    const createdIntern =
+                        await internResponse.json();
+
+
+                    const internId =
+                        createdIntern.id;
+
+
+
+                    // =========================
+                    // ADD SKILLS
+                    // =========================
+
+                    for (
+                        const skill of skills
+                    ) {
+
+
+                        const skillResponse =
+                            await fetch(
+                                `/api/interns/${internId}/skills/${skill.skillId}?proficiency=${skill.proficiency}`,
+                                {
+                                    method: "POST"
+                                }
+                            );
+
+
+                        if (
+                            !skillResponse.ok
+                        ) {
+
+
+                            console.error(
+                                "Failed to add skill:",
+                                skill
+                            );
+
+
+                            alert(
+                                "Intern was created, but one or more skills could not be added."
+                            );
+
+
+                            return;
+
+                        }
+
+                    }
+
+
+
+                    // =========================
+                    // SUCCESS
+                    // =========================
+
+                    closeAddInternModal();
+
+
+                    document
+                        .getElementById(
+                            "addInternForm"
+                        )
+                        .reset();
+
+
+
+                    // =========================
+                    // RESET SKILLS
+                    // =========================
+
+                    const skillsContainer =
+                        document.getElementById(
+                            "skillsContainer"
+                        );
+
+
+                    skillsContainer.innerHTML = `
+
+                        <div class="skill-row">
+
+                            <select class="skill-select">
+
+                                <option value="">
+                                    Select skill
+                                </option>
+
+                                <option value="1">
+                                    Java
+                                </option>
+
+                                <option value="2">
+                                    Spring Boot
+                                </option>
+
+                                <option value="3">
+                                    MySQL
+                                </option>
+
+                                <option value="4">
+                                    Docker
+                                </option>
+
+                            </select>
+
+
+                            <select class="proficiency-select">
+
+                                <option value="">
+                                    Level
+                                </option>
+
+                                <option value="1">
+                                    1 / 5
+                                </option>
+
+                                <option value="2">
+                                    2 / 5
+                                </option>
+
+                                <option value="3">
+                                    3 / 5
+                                </option>
+
+                                <option value="4">
+                                    4 / 5
+                                </option>
+
+                                <option value="5">
+                                    5 / 5
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                    type="button"
+                                    class="remove-skill-button"
+                                    onclick="removeSkillRow(this)">
+
+                                ×
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+
+                    // Refresh directory
+
+                    window.location.reload();
+
+
+                } catch (error) {
+
+
+                    console.error(error);
+
+
+                    alert(
+                        "Unable to connect to the server."
+                    );
+
+                }
+
+            }
+        );
+
+
+
+    // =========================
+    // CLOSE MODAL OUTSIDE CLICK
+    // =========================
+
+    document
+        .getElementById("addInternModal")
+        .addEventListener(
+            "click",
+            function (event) {
+
+
+                if (
+                    event.target === this
+                ) {
+
+                    closeAddInternModal();
+
+                }
+
+            }
+        );
+
+</script>
+
+
+</body>
+
+</html>

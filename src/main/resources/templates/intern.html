@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        InternHaul | Intern Profile
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/style.css}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                IH
+            </div>
+
+            <div>
+
+                <h2>InternHaul</h2>
+
+                <span>
+                    Allocation Platform
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+
+            <a th:href="@{/dashboard}"
+               class="nav-item">
+
+                <span>▦</span>
+                Dashboard
+
+            </a>
+
+
+            <a th:href="@{/interns}"
+               class="nav-item active">
+
+                <span>◉</span>
+                Interns
+
+            </a>
+
+
+            <a th:href="@{/projects}"
+               class="nav-item">
+
+                <span>▣</span>
+                Projects
+
+            </a>
+
+
+            <a th:href="@{/matching}"
+               class="nav-item">
+
+                <span>✦</span>
+                Matching
+
+            </a>
+
+
+            <a th:href="@{/allocations}"
+               class="nav-item">
+
+                <span>⇄</span>
+                Allocations
+
+            </a>
+
+
+            <div class="nav-divider"></div>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>⚙</span>
+                Settings
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <span>
+                InternHaul
+            </span>
+
+            <small>
+                v1.0.0
+            </small>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- =========================
+             TOPBAR
+        ========================== -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Intern Profile
+                </h1>
+
+                <p>
+                    View intern details and technical capabilities
+                </p>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <button class="notification"
+                        type="button">
+
+                    🔔
+
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        M
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Manager
+                        </strong>
+
+                        <span>
+                            Project Manager
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================
+             PROFILE CONTENT
+        ========================== -->
+
+        <section class="dashboard">
+
+
+            <!-- BACK -->
+
+            <a th:href="@{/interns}"
+               class="back-link">
+
+                ← Back to Intern Directory
+
+            </a>
+
+
+
+            <!-- =========================
+                 PROFILE HERO
+            ========================== -->
+
+            <section class="profile-hero">
+
+
+                <div class="profile-identity">
+
+
+                    <div class="profile-avatar"
+                         th:classappend="${intern.available}
+                         ? ' profile-avatar-available' : ''">
+
+                        <span th:text="${#strings.substring(
+                            intern.name, 0, 1
+                        ).toUpperCase()}">
+
+                            A
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="eyebrow">
+                            INTERN PROFILE
+                        </span>
+
+
+                        <h2 th:text="${intern.name}">
+
+                            Intern Name
+
+                        </h2>
+
+
+                        <span class="availability"
+                              th:classappend="${intern.available}
+                              ? ' available' : ' allocated'">
+
+
+                            <span th:if="${intern.available}">
+                                Available for Allocation
+                            </span>
+
+
+                            <span th:unless="${intern.available}">
+                                Currently Allocated
+                            </span>
+
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="profile-actions">
+
+
+                    <a th:href="@{/matching}"
+                       class="primary-button">
+
+                        Find Matching Project
+
+                    </a>
+
+
+                    <button type="button"
+                            class="danger-button"
+                            onclick="deleteIntern()">
+
+                        Delete Intern
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 PROFILE GRID
+            ========================== -->
+
+            <div class="profile-grid">
+
+
+                <!-- =========================
+                     BASIC INFORMATION
+                ========================== -->
+
+                <section class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                INFORMATION
+                            </span>
+
+                            <h3>
+                                Personal Details
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-details">
+
+
+                        <div class="profile-detail">
+
+                            <span class="detail-label">
+                                Full Name
+                            </span>
+
+                            <strong th:text="${intern.name}">
+                                Intern Name
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span class="detail-label">
+                                Email
+                            </span>
+
+                            <strong th:text="${intern.email}">
+                                email@example.com
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span class="detail-label">
+                                Location
+                            </span>
+
+                            <strong th:text="${intern.location}">
+                                Hyderabad
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span class="detail-label">
+                                Allocation Status
+                            </span>
+
+
+                            <strong
+                                    th:if="${intern.available}"
+                                    class="status-text available-text">
+
+                                Available
+
+                            </strong>
+
+
+                            <strong
+                                    th:unless="${intern.available}"
+                                    class="status-text allocated-text">
+
+                                Allocated
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     SKILLS
+                ========================== -->
+
+                <section class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                TECHNICAL PROFILE
+                            </span>
+
+                            <h3>
+                                Skills & Proficiency
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOADING -->
+
+                    <div id="skillsLoading"
+                         class="skills-message">
+
+                        Loading skills...
+
+                    </div>
+
+
+                    <!-- ERROR -->
+
+                    <div id="skillsError"
+                         class="skills-message"
+                         style="display: none;">
+
+                        Unable to load skills.
+
+                    </div>
+
+
+                    <!-- EMPTY -->
+
+                    <div id="skillsEmpty"
+                         class="skills-message"
+                         style="display: none;">
+
+                        No skills have been added to this profile yet.
+
+                    </div>
+
+
+                    <!-- SKILLS -->
+
+                    <div id="skillsContainer"
+                         class="skills-list"
+                         style="display: none;">
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =========================
+                 ALLOCATION SECTION
+            ========================== -->
+
+            <section class="panel allocation-panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <span class="eyebrow">
+                            RESOURCE ALLOCATION
+                        </span>
+
+                        <h3>
+                            Ready for Project Matching?
+                        </h3>
+
+                        <p>
+                            Use the matching engine to find projects
+                            based on this intern's technical skills.
+                        </p>
+
+                    </div>
+
+
+                    <a th:href="@{/matching}"
+                       class="primary-button">
+
+                        Open Matching
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script th:inline="javascript">
+
+    const internId =
+        /*[[${intern.id}]]*/ 0;
+
+
+
+    // =========================
+    // LOAD SKILLS
+    // =========================
+
+    async function loadSkills() {
+
+        const loading =
+            document.getElementById(
+                "skillsLoading"
+            );
+
+        const error =
+            document.getElementById(
+                "skillsError"
+            );
+
+        const empty =
+            document.getElementById(
+                "skillsEmpty"
+            );
+
+        const container =
+            document.getElementById(
+                "skillsContainer"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/interns/${internId}/skills`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load skills"
+                );
+
+            }
+
+
+            const skills =
+                await response.json();
+
+
+            loading.style.display = "none";
+
+
+            if (
+                !skills ||
+                skills.length === 0
+            ) {
+
+                empty.style.display = "block";
+
+                return;
+
+            }
+
+
+            container.innerHTML = "";
+
+
+            skills.forEach(
+                function (internSkill) {
+
+
+                    const skillName =
+                        internSkill.skill
+                            ? internSkill.skill.name
+                            : "Unknown Skill";
+
+
+                    const proficiency =
+                        internSkill.proficiency || 0;
+
+
+                    const percentage =
+                        Math.min(
+                            proficiency * 20,
+                            100
+                        );
+
+
+                    const skillCard =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    skillCard.className =
+                        "skill-card";
+
+
+                    skillCard.innerHTML = `
+
+                        <div class="skill-card-top">
+
+                            <strong>
+                                ${escapeHtml(skillName)}
+                            </strong>
+
+                            <span>
+                                ${proficiency} / 5
+                            </span>
+
+                        </div>
+
+
+                        <div class="skill-progress">
+
+                            <div
+                                class="skill-progress-fill"
+                                style="width: ${percentage}%">
+                            </div>
+
+                        </div>
+
+                    `;
+
+
+                    container.appendChild(
+                        skillCard
+                    );
+
+                }
+            );
+
+
+            container.style.display =
+                "flex";
+
+
+        } catch (errorObject) {
+
+            console.error(
+                errorObject
+            );
+
+
+            loading.style.display =
+                "none";
+
+
+            error.style.display =
+                "block";
+
+        }
+
+    }
+
+
+
+    // =========================
+    // HTML ESCAPE
+    // =========================
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent = value;
+
+        return div.innerHTML;
+
+    }
+
+
+
+    // =========================
+    // DELETE INTERN
+    // =========================
+
+    async function deleteIntern() {
+
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this intern?"
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    `/api/interns/${internId}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to delete intern"
+                );
+
+            }
+
+
+            window.location.href =
+                "/interns";
+
+
+        } catch (errorObject) {
+
+
+            console.error(
+                errorObject
+            );
+
+
+            alert(
+                "Unable to delete the intern."
+            );
+
+        }
+
+    }
+
+
+
+    // =========================
+    // INITIALIZE
+    // =========================
+
+    loadSkills();
+
+</script>
+
+
+
+<!-- =========================
+     PAGE-SPECIFIC STYLES
+========================== -->
+
+<style>
+
+    .back-link {
+
+        display: inline-block;
+
+        margin-bottom: 20px;
+
+        color: #64748b;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+    }
+
+
+    .back-link:hover {
+
+        color: #111827;
+
+    }
+
+
+    .profile-hero {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 30px;
+
+        padding: 28px;
+
+        margin-bottom: 24px;
+
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 16px;
+
+    }
+
+
+    .profile-identity {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 20px;
+
+    }
+
+
+    .profile-avatar {
+
+        width: 76px;
+
+        height: 76px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #e5e7eb;
+
+        color: #475569;
+
+        font-size: 28px;
+
+        font-weight: 700;
+
+    }
+
+
+    .profile-avatar-available {
+
+        background: #dcfce7;
+
+        color: #15803d;
+
+    }
+
+
+    .profile-identity h2 {
+
+        margin: 5px 0 10px;
+
+        font-size: 28px;
+
+    }
+
+
+    .profile-actions {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+    }
+
+
+    .danger-button {
+
+        border: 1px solid #fecaca;
+
+        background: #fff;
+
+        color: #dc2626;
+
+        padding: 11px 16px;
+
+        border-radius: 8px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+    }
+
+
+    .danger-button:hover {
+
+        background: #fef2f2;
+
+    }
+
+
+    .profile-grid {
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 24px;
+
+        margin-bottom: 24px;
+
+    }
+
+
+    .profile-details {
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 22px;
+
+    }
+
+
+    .profile-detail {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 7px;
+
+    }
+
+
+    .detail-label {
+
+        color: #94a3b8;
+
+        font-size: 12px;
+
+        text-transform: uppercase;
+
+        letter-spacing: .06em;
+
+        font-weight: 700;
+
+    }
+
+
+    .profile-detail strong {
+
+        color: #1e293b;
+
+        font-size: 15px;
+
+    }
+
+
+    .status-text {
+
+        font-size: 14px !important;
+
+    }
+
+
+    .available-text {
+
+        color: #16a34a !important;
+
+    }
+
+
+    .allocated-text {
+
+        color: #dc2626 !important;
+
+    }
+
+
+    .skills-list {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 16px;
+
+    }
+
+
+    .skill-card {
+
+        padding: 14px 16px;
+
+        background: #f8fafc;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 10px;
+
+    }
+
+
+    .skill-card-top {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .skill-card-top strong {
+
+        color: #1e293b;
+
+    }
+
+
+    .skill-card-top span {
+
+        color: #64748b;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+    }
+
+
+    .skill-progress {
+
+        height: 7px;
+
+        background: #e2e8f0;
+
+        border-radius: 10px;
+
+        overflow: hidden;
+
+    }
+
+
+    .skill-progress-fill {
+
+        height: 100%;
+
+        background: #334155;
+
+        border-radius: 10px;
+
+    }
+
+
+    .skills-message {
+
+        padding: 20px 0;
+
+        color: #64748b;
+
+        font-size: 14px;
+
+    }
+
+
+    .allocation-panel {
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .allocation-panel .panel-header {
+
+        align-items: center;
+
+    }
+
+
+    .allocation-panel p {
+
+        margin-top: 6px;
+
+        color: #64748b;
+
+        font-size: 14px;
+
+    }
+
+
+    @media (max-width: 900px) {
+
+        .profile-grid {
+
+            grid-template-columns: 1fr;
+
+        }
+
+
+        .profile-hero {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+        }
+
+
+        .profile-actions {
+
+            width: 100%;
+
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .profile-details {
+
+            grid-template-columns: 1fr;
+
+        }
+
+
+        .profile-identity {
+
+            align-items: flex-start;
+
+        }
+
+
+        .profile-actions {
+
+            flex-direction: column;
+
+            align-items: stretch;
+
+        }
+
+    }
+
+</style>
+
+
+</body>
+
+</html>

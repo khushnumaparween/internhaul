@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>InternHaul | Matching</title>
+
+    <link rel="stylesheet"
+          th:href="@{/style.css}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                IH
+            </div>
+
+            <div>
+
+                <h2>InternHaul</h2>
+
+                <span>
+                    Allocation Platform
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <a th:href="@{/dashboard}"
+               class="nav-item">
+
+                <span>▦</span>
+                Dashboard
+
+            </a>
+
+
+            <a th:href="@{/interns}"
+               class="nav-item">
+
+                <span>◉</span>
+                Interns
+
+            </a>
+
+
+            <a th:href="@{/projects}"
+               class="nav-item">
+
+                <span>▣</span>
+                Projects
+
+            </a>
+
+
+            <a th:href="@{/matching}"
+               class="nav-item active">
+
+                <span>✦</span>
+                Matching
+
+            </a>
+
+
+            <a th:href="@{/allocations}"
+               class="nav-item">
+
+                <span>⇄</span>
+                Allocations
+
+            </a>
+
+
+            <div class="nav-divider"></div>
+
+
+            <a th:href="@{/settings}"
+               class="nav-item">
+
+                <span>⚙</span>
+                Settings
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <span>
+                InternHaul
+            </span>
+
+            <small>
+                v1.0.0
+            </small>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- =========================
+             TOPBAR
+        ========================== -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Smart Matching
+                </h1>
+
+                <p>
+                    Find interns that best match project requirements
+                </p>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <button class="notification"
+                        type="button">
+
+                    🔔
+
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        M
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Manager
+                        </strong>
+
+                        <span>
+                            Project Manager
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
+        <section class="dashboard">
+
+
+            <!-- =========================
+                 CURRENT PROJECT
+            ========================== -->
+
+            <div class="welcome-card"
+                 th:if="${currentProject != null}">
+
+                <div>
+
+                    <span class="eyebrow">
+                        MATCHING FOR PROJECT
+                    </span>
+
+
+                    <h2 th:text="${currentProject.name}">
+                        Payment Modernization
+                    </h2>
+
+
+                    <p th:text="${currentProject.description}">
+                        Project description
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-decoration">
+                    ✦
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 PROJECT CAPACITY
+            ========================== -->
+
+            <section class="panel"
+                     th:if="${currentProject != null}">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            PROJECT CAPACITY
+                        </span>
+
+                        <h3>
+                            Allocation Capacity
+                        </h3>
+
+                    </div>
+
+
+                    <span class="status"
+                          th:classappend="${currentProject.availableSlots == 0
+                              ? ' rejected-badge'
+                              : ' approved-badge'}"
+                          th:text="${currentProject.availableSlots == 0
+                              ? 'FULL'
+                              : 'OPEN'}">
+
+                        OPEN
+
+                    </span>
+
+                </div>
+
+
+                <div class="project-info">
+
+
+                    <div class="capacity-summary">
+
+                        <div>
+
+                            <span>
+                                Remaining Slots
+                            </span>
+
+                            <strong
+                                    th:text="${currentProject.availableSlots}">
+
+                                1
+
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Project Status
+                            </span>
+
+                            <strong
+                                    th:text="${currentProject.active
+                                        ? 'ACTIVE'
+                                        : 'INACTIVE'}">
+
+                                ACTIVE
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- OPEN -->
+
+                    <p th:if="${currentProject.active
+                              and currentProject.availableSlots > 0}">
+
+                        This project has
+
+                        <strong
+                                th:text="${currentProject.availableSlots}">
+
+                            1
+
+                        </strong>
+
+                        slot(s) remaining.
+                        Eligible interns can be submitted
+                        for allocation.
+
+                    </p>
+
+
+                    <!-- FULL -->
+
+                    <p th:if="${currentProject.active
+                              and currentProject.availableSlots == 0}">
+
+                        <strong>
+                            This project is full.
+                        </strong>
+
+                        All available slots have been allocated.
+                        New allocation requests cannot be created.
+
+                    </p>
+
+
+                    <!-- INACTIVE -->
+
+                    <p th:if="${!currentProject.active}">
+
+                        <strong>
+                            This project is inactive.
+                        </strong>
+
+                        It is not accepting new allocation requests.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 NO ACTIVE PROJECT
+            ========================== -->
+
+            <section class="panel"
+                     th:if="${currentProject == null}">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            SMART MATCHING
+                        </span>
+
+
+                        <h3>
+                            No Active Project
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <p>
+                        There is currently no active project
+                        available for matching.
+                    </p>
+
+
+                    <a th:href="@{/projects}"
+                       class="primary-button">
+
+                        View Projects
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 MATCH RESULTS
+            ========================== -->
+
+            <section class="panel"
+                     th:if="${currentProject != null}">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            RECOMMENDED INTERNS
+                        </span>
+
+
+                        <h3>
+                            Best Matches
+                        </h3>
+
+
+                        <p class="panel-description">
+
+                            Interns are ranked using skill coverage
+                            and proficiency.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     MATCH LIST
+                ========================== -->
+
+                <div class="activity-list"
+                     th:if="${matches != null and !matches.isEmpty()}">
+
+
+                    <div class="activity"
+                         th:each="match : ${matches}">
+
+
+                        <!-- AVATAR -->
+
+                        <div class="candidate-avatar"
+                             th:text="${#strings.substring(
+                                 match.internName,
+                                 0,
+                                 1
+                             ).toUpperCase()}">
+
+                            P
+
+                        </div>
+
+
+
+                        <!-- INTERN -->
+
+                        <div class="activity-content">
+
+
+                            <strong
+                                    th:text="${match.internName}">
+
+                                Priya Singh
+
+                            </strong>
+
+
+                            <span>
+
+                                <span
+                                        th:text="${match.matchedSkills}">
+                                    3
+                                </span>
+
+                                /
+
+                                <span
+                                        th:text="${match.totalRequiredSkills}">
+                                    4
+                                </span>
+
+                                required skills
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- OVERALL SCORE -->
+
+                        <div class="match-score">
+
+
+                            <strong
+                                    th:text="${#numbers.formatDecimal(
+                                    match.overallScore,
+                                    0,
+                                    0
+                                ) + '%'}">
+
+                                67%
+
+                            </strong>
+
+
+                            <span>
+                                Match
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- COVERAGE -->
+
+                        <div class="coverage">
+
+
+                            <span>
+
+                                Coverage:
+
+                                <span
+                                        th:text="${#numbers.formatDecimal(
+                                        match.skillCoverageScore,
+                                        0,
+                                        0
+                                    ) + '%'}">
+
+                                    75%
+
+                                </span>
+
+                            </span>
+
+
+                            <div class="progress">
+
+                                <div
+                                        th:style="'width: '
+                                    + ${match.skillCoverageScore}
+                                    + '%'">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PROFILE -->
+
+                        <a class="secondary-btn"
+                           th:href="@{/interns/{id}(id=${match.internId})}">
+
+                            Profile
+
+                        </a>
+
+
+
+                        <!-- ALLOCATE -->
+
+                        <button
+                                th:if="${currentProject.active
+                                    and currentProject.availableSlots > 0
+                                    and match.available}"
+
+                                type="button"
+
+                                class="primary-button allocate-button"
+
+                                th:data-intern-id="${match.internId}"
+
+                                th:data-project-id="${match.projectId}"
+
+                                th:data-intern-name="${match.internName}">
+
+                            Allocate
+
+                        </button>
+
+
+
+                        <!-- FULL -->
+
+                        <span
+                                th:if="${currentProject.active
+                                    and currentProject.availableSlots == 0}"
+
+                                class="secondary-btn disabled-action">
+
+                            Project Full
+
+                        </span>
+
+
+
+                        <!-- INACTIVE -->
+
+                        <span
+                                th:if="${!currentProject.active}"
+
+                                class="secondary-btn disabled-action">
+
+                            Project Inactive
+
+                        </span>
+
+
+
+                        <!-- INTERN UNAVAILABLE -->
+
+                        <span
+                                th:if="${currentProject.active
+                                    and currentProject.availableSlots > 0
+                                    and !match.available}"
+
+                                class="secondary-btn disabled-action">
+
+                            Unavailable
+
+                        </span>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     NO MATCHES
+                ========================== -->
+
+                <div th:if="${matches == null or matches.isEmpty()}"
+                     class="empty-matches">
+
+                    <strong>
+                        No available interns found
+                    </strong>
+
+                    <p>
+                        Add available interns and project skills
+                        to generate matching recommendations.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================
+     ALLOCATION MODAL
+========================== -->
+
+<div id="allocationModal"
+     class="modal-overlay">
+
+
+    <div class="modal-card">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Confirm Allocation
+                </h2>
+
+                <p>
+                    Create an allocation request for this intern?
+                </p>
+
+            </div>
+
+
+            <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeAllocationModal()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+
+        <div class="allocation-confirmation">
+
+
+            <div>
+
+                <span>
+                    Intern
+                </span>
+
+                <strong id="selectedInternName">
+                    Intern Name
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Project
+                </span>
+
+                <strong
+                        th:if="${currentProject != null}"
+                        th:text="${currentProject.name}">
+
+                    Project Name
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="form-actions">
+
+
+            <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeAllocationModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                    type="button"
+                    class="primary-button"
+                    onclick="confirmAllocation()">
+
+                Confirm Allocation
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script>
+
+    let selectedInternId = null;
+
+    let selectedProjectId = null;
+
+
+    // =========================
+    // OPEN MODAL
+    // =========================
+
+    document
+        .querySelectorAll(".allocate-button")
+        .forEach(function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    selectedInternId =
+                        this.dataset.internId;
+
+                    selectedProjectId =
+                        this.dataset.projectId;
+
+                    document
+                        .getElementById(
+                            "selectedInternName"
+                        )
+                        .textContent =
+                            this.dataset.internName;
+
+                    document
+                        .getElementById(
+                            "allocationModal"
+                        )
+                        .classList.add("show");
+
+                }
+            );
+
+        });
+
+
+    // =========================
+    // CLOSE MODAL
+    // =========================
+
+    function closeAllocationModal() {
+
+        document
+            .getElementById(
+                "allocationModal"
+            )
+            .classList.remove("show");
+
+        selectedInternId = null;
+
+        selectedProjectId = null;
+
+    }
+
+
+    // =========================
+    // CONFIRM ALLOCATION
+    // =========================
+
+    async function confirmAllocation() {
+
+        if (
+            !selectedInternId ||
+            !selectedProjectId
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/allocations?internId=${selectedInternId}&projectId=${selectedProjectId}`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                let message =
+                    "Failed to create allocation.";
+
+                try {
+
+                    const error =
+                        await response.json();
+
+                    if (error.message) {
+
+                        message =
+                            error.message;
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Could not read error response",
+                        error
+                    );
+
+                }
+
+                alert(message);
+
+                return;
+
+            }
+
+
+            closeAllocationModal();
+
+
+            alert(
+                "Allocation request created successfully."
+            );
+
+
+            window.location.href =
+                "/allocations";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to connect to the server."
+            );
+
+        }
+
+    }
+
+
+    // =========================
+    // OUTSIDE CLICK
+    // =========================
+
+    document
+        .getElementById("allocationModal")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (event.target === this) {
+
+                    closeAllocationModal();
+
+                }
+
+            }
+        );
+
+</script>
+
+
+
+<!-- =========================
+     PAGE STYLES
+========================== -->
+
+<style>
+
+    .panel-description {
+
+        margin-top: 5px;
+
+        color: #64748b;
+
+        font-size: 14px;
+
+    }
+
+
+    .capacity-summary {
+
+        display: flex;
+
+        gap: 50px;
+
+        margin-bottom: 18px;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .capacity-summary div {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+    }
+
+
+    .capacity-summary span {
+
+        color: #64748b;
+
+        font-size: 13px;
+
+    }
+
+
+    .capacity-summary strong {
+
+        font-size: 24px;
+
+    }
+
+
+    .empty-matches {
+
+        padding: 35px;
+
+        text-align: center;
+
+        color: #64748b;
+
+    }
+
+
+    .empty-matches strong {
+
+        display: block;
+
+        color: #1e293b;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .empty-matches p {
+
+        margin: 0;
+
+    }
+
+
+    .disabled-action {
+
+        opacity: .6;
+
+        cursor: not-allowed;
+
+        white-space: nowrap;
+
+    }
+
+
+    .allocate-button {
+
+        border: none;
+
+        cursor: pointer;
+
+    }
+
+
+    @media (max-width: 900px) {
+
+        .activity {
+
+            flex-wrap: wrap;
+
+        }
+
+    }
+
+</style>
+
+
+</body>
+
+</html>

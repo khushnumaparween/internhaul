@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>InternHaul | Projects</title>
+
+    <link rel="stylesheet"
+          th:href="@{/style.css}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- ==================== SIDEBAR ==================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                IH
+            </div>
+
+            <div>
+
+                <h2>InternHaul</h2>
+
+                <span>
+                    Allocation Platform
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <a th:href="@{/dashboard}"
+               class="nav-item">
+
+                <span>▦</span>
+                Dashboard
+
+            </a>
+
+
+            <a th:href="@{/interns}"
+               class="nav-item">
+
+                <span>◉</span>
+                Interns
+
+            </a>
+
+
+            <a th:href="@{/projects}"
+               class="nav-item active">
+
+                <span>▣</span>
+                Projects
+
+            </a>
+
+
+            <a th:href="@{/matching}"
+               class="nav-item">
+
+                <span>✦</span>
+                Matching
+
+            </a>
+
+
+            <a th:href="@{/allocations}"
+               class="nav-item">
+
+                <span>⇄</span>
+                Allocations
+
+            </a>
+
+
+            <div class="nav-divider"></div>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>⚙</span>
+                Settings
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <span>InternHaul</span>
+
+            <small>v1.0.0</small>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ==================== MAIN ==================== -->
+
+    <main class="main-content">
+
+
+        <!-- ==================== TOP BAR ==================== -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Projects
+                </h1>
+
+                <p>
+                    Manage projects and allocation requirements
+                </p>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <button class="notification">
+                    🔔
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        M
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Manager
+                        </strong>
+
+                        <span>
+                            Project Manager
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==================== PROJECTS ==================== -->
+
+        <section class="dashboard">
+
+
+            <!-- HEADER -->
+
+            <div class="welcome-card">
+
+                <div>
+
+                    <span class="eyebrow">
+                        PROJECT MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Projects
+                    </h2>
+
+                    <p>
+                        View active projects and manage available
+                        allocation opportunities.
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-decoration">
+                    IH
+                </div>
+
+            </div>
+
+
+
+            <!-- PROJECT LIST -->
+
+            <div class="content-grid">
+
+
+                <section class="panel"
+                         style="grid-column: 1 / -1;">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                PROJECT PORTFOLIO
+                            </span>
+
+                            <h3>
+                                All Projects
+                            </h3>
+
+                        </div>
+
+
+                        <span class="status active-status"
+                              th:text="${projects.size() + ' Projects'}">
+
+                            0 Projects
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- EMPTY STATE -->
+
+                    <div th:if="${projects.isEmpty()}"
+                         class="project-info">
+
+                        <h3>
+                            No projects found
+                        </h3>
+
+                        <p>
+                            Create a project through the REST API
+                            to make it available for allocation.
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- PROJECTS -->
+
+                    <div th:unless="${projects.isEmpty()}"
+                         class="activity-list">
+
+
+                        <div class="activity"
+                             th:each="project : ${projects}">
+
+
+                            <div class="activity-icon"
+                                 th:classappend="${project.active
+                                 ? ' approved'
+                                 : ' pending'}">
+
+                                <span th:text="${project.active
+                                    ? '✓'
+                                    : '○'}">
+                                    ✓
+                                </span>
+
+                            </div>
+
+
+                            <div class="activity-content">
+
+                                <strong th:text="${project.name}">
+                                    Payment Modernization
+                                </strong>
+
+
+                                <span th:text="${project.description}">
+                                    Project description
+                                </span>
+
+
+                                <span th:text="${project.technology}">
+                                    Java
+                                </span>
+
+                            </div>
+
+
+                            <span class="badge"
+                                  th:classappend="${project.active
+                                  ? ' approved-badge'
+                                  : ' pending-badge'}"
+                                  th:text="${project.active
+                                  ? 'Active'
+                                  : 'Inactive'}">
+
+                                Active
+
+                            </span>
+
+
+                            <a class="primary-button"
+                               th:href="@{/projects/{id}(id=${project.id})}">
+
+                                View
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
